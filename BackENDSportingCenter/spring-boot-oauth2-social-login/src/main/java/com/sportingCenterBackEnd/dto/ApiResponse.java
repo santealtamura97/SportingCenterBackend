@@ -11,4 +11,12 @@ public class ApiResponse {
         success = b;
         message = error;
     }
+
+    public Boolean getSuccess() {
+        return success;
+    }
+
+    public String getMessage() {
+        return message;
+    }
 }

@@ -42,6 +42,7 @@ public class EventService {
         DateFormat dateFormat= new SimpleDateFormat("dd-MM-yyyy");
         Date now = new Date();
         now = GeneralUtils.removeTime(now);
+        System.out.println(now);
         for (Event event : allEvents) {
             String stringDataEventoNonReversed = StringUtils.substringBefore(event.getInizio(), "T");
             String stringDataEvento = GeneralUtils.aggiustaStringData(stringDataEventoNonReversed);

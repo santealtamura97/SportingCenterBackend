@@ -49,29 +49,30 @@ public class UserServiceImpl implements UserService {
 			throw new UserAlreadyExistAuthenticationException("User with email id " + signUpRequest.getEmail() + " already exist");
 		}
 		User user = buildUser(signUpRequest);
-		Date now = Calendar.getInstance().getTime();
-		user.setCreatedDate(now);
-		user.setModifiedDate(now);
 		user = userRepository.save(user);
 		userRepository.flush();
 		return user;
 	}
 
-	private User buildUser(final SignUpRequest formDTO) {
+	@Override
+	public User buildUser(final SignUpRequest formDTO) {
 		User user = new User();
 		user.setDisplayName(formDTO.getDisplayName());
 		user.setEmail(formDTO.getEmail());
-		user.setNumber(formDTO.getNumber());
+		//user.setNumber(formDTO.getNumber());
 		user.setPassword(passwordEncoder.encode(formDTO.getPassword()));
 		final HashSet<Role> roles = new HashSet<Role>();
 		roles.add(roleRepository.findByName(Role.ROLE_USER));
 		user.setRoles(roles);
-		user.setProvider(formDTO.getSocialProvider().getProviderType());
-		user.setEnabled(true);
-		user.setProviderUserId(formDTO.getProviderUserId());
-		user.setDataNascita(invertDate(formDTO.getDataNascita()));
+		//user.setProvider(formDTO.getSocialProvider().getProviderType());
+		user.setEnabled(formDTO.isEnabled());
+		//user.setProviderUserId(formDTO.getProviderUserId());
+		//user.setDataNascita(invertDate(formDTO.getDataNascita()));
 		user.setAbbonamento(formDTO.getAbbonamento());
-		user.setDataScadenza(invertDate(formDTO.getDataScadenza()));
+		//user.setDataScadenza(invertDate(formDTO.getDataScadenza()));
+		Date now = Calendar.getInstance().getTime();
+		user.setCreatedDate(now);
+		user.setModifiedDate(now);
 		return user;
 	}
 

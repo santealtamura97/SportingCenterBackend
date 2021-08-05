@@ -11,4 +11,12 @@ public class JwtAuthenticationResponse {
 		accessToken = jwt;
 		user = buildUserInfo;
 	}
+
+	public String getAccessToken() {
+		return accessToken;
+	}
+
+	public UserInfo getUser() {
+		return user;
+	}
 }

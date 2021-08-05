@@ -21,7 +21,6 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 public class Role implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public static final String USER = "USER";
@@ -42,6 +41,9 @@ public class Role implements Serializable {
 
 	public Role(String name) {
 		this.name = name;
+	}
+
+	public Role() {
 	}
 
 	public static long getSerialVersionUID() {

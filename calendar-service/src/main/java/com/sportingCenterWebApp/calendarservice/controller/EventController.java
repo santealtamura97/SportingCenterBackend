@@ -47,5 +47,10 @@ public class EventController {
         return bookingService.getPresences(eventId);
     }
 
+    @GetMapping("/todayevents")
+    public List<Event> getTodayEvents() {
+        return eventService.getTodayEvents();
+    }
+
 }
 

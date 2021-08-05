@@ -4,12 +4,18 @@ import javax.validation.Valid;
 
 import com.sportingCenterBackEnd.config.CurrentUser;
 import com.sportingCenterBackEnd.dto.*;
+import com.sportingCenterBackEnd.model.ConfirmationToken;
 import com.sportingCenterBackEnd.model.Role;
 import com.sportingCenterBackEnd.model.User;
+import com.sportingCenterBackEnd.model.UserCode;
+import com.sportingCenterBackEnd.repo.ConfirmationTokenRepository;
+import com.sportingCenterBackEnd.repo.UserCodeRepository;
 import com.sportingCenterBackEnd.repo.UserRepository;
+import com.sportingCenterBackEnd.service.EmailSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
@@ -43,30 +49,62 @@ public class AuthController {
 	@Autowired
 	TokenProvider tokenProvider;
 
-	public AuthController(UserRepository userRepository) {
+	@Autowired
+	private final ConfirmationTokenRepository confirmationTokenRepository;
+
+	@Autowired
+	private final UserCodeRepository userCodeRepository;
+
+	@Autowired
+	private EmailSenderService emailSenderService;
+
+	public AuthController(UserRepository userRepository, ConfirmationTokenRepository confirmationTokenRepository, UserCodeRepository userCodeRepository) {
 		this.userRepository = userRepository;
+		this.confirmationTokenRepository = confirmationTokenRepository;
+		this.userCodeRepository = userCodeRepository;
 	}
 
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-		System.out.println(loginRequest.getEmail());
 		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = tokenProvider.createToken(authentication);
 		LocalUser localUser = (LocalUser) authentication.getPrincipal();
-		return ResponseEntity.ok(new JwtAuthenticationResponse(jwt, GeneralUtils.buildUserInfo(localUser)));
+		JwtAuthenticationResponse response = new JwtAuthenticationResponse(jwt, GeneralUtils.buildUserInfo(localUser));
+		return ResponseEntity.ok(response);
 	}
 
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
 		try {
-			System.out.println("Data Nascita: " +  signUpRequest.getDataNascita());
-			userService.registerNewUser(signUpRequest);
+			User user = userService.buildUser(signUpRequest);
+			ConfirmationToken confirmationToken = new ConfirmationToken(user);
+			confirmationTokenRepository.save(confirmationToken);
+			SimpleMailMessage mailMessage = new SimpleMailMessage();
+			mailMessage.setTo(user.getEmail());
+			mailMessage.setSubject("Complete Registration!");
+			mailMessage.setText("To confirm your account, please click here : "
+					+"http://localhost:8080/api/auth/confirm-account?token="+confirmationToken.getConfirmationToken());
+
+			emailSenderService.sendEmail(mailMessage);
 		} catch (UserAlreadyExistAuthenticationException e) {
-			//log.error("Exception Ocurred", e);
 			return new ResponseEntity<>(new ApiResponse(false, "Email Address already in use!"), HttpStatus.BAD_REQUEST);
 		}
-		return ResponseEntity.ok().body(new ApiResponse(true, "User registered successfully"));
+		return ResponseEntity.ok(new ApiResponse(true, "OK"));
+	}
+
+	@RequestMapping(value="/confirm-account", method= {RequestMethod.GET, RequestMethod.POST})
+	public ResponseEntity<?> confirmUserAccount( @RequestParam("token")String confirmationToken) {
+		ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(confirmationToken);
+		if(token != null) {
+			User user = token.getUser();
+			user.setEnabled(true);
+			userRepository.save(user);
+			return ResponseEntity.ok().body(new ApiResponse(true, "User registered successfully"));
+		}
+		else {
+			return ResponseEntity.ok().body(new ApiResponse(false, "Errore"));
+		}
 	}
 
 	@RequestMapping(value = "/{authToken}", method = RequestMethod.GET)
@@ -82,7 +120,7 @@ public class AuthController {
 				rolesList.add(role.getName());
 				userRoles = userRoles + role.getName() + " ";
 			}
-			UserInfo userInfo = new UserInfo(user.getId().toString(),user.getDisplayName(),user.getEmail(),rolesList);
+			UserInfo userInfo = new UserInfo(user.getId().toString(),user.getDisplayName(),user.getEmail(),rolesList, user.getAbbonamento());
 			return ResponseEntity.ok()
 					//.headers(responseHeaders)
 					.body(userRoles);
@@ -90,6 +128,22 @@ public class AuthController {
 			return null;
 		}
 	}
+
+	@PostMapping("/usercode")
+	public ResponseEntity<?> registerUser(@Valid @RequestBody UserCode userCode) {
+		userCodeRepository.save(userCode);
+		return ResponseEntity.ok(new ApiResponse(true, "OK"));
+	}
+
+	@PostMapping( "/validateUserCode")
+	public ResponseEntity<?> validateUserCode(@Valid @RequestBody String userCode) {
+		userCode = userCode.replaceAll("^\"+|\"+$", "");
+		System.out.println(userCode);
+		UserCode uC = userCodeRepository.findByCode(userCode);
+		UserCodeResponse userCodeResponse = new UserCodeResponse(uC.getDisplay_name(), uC.getId_abbonamento());
+		return ResponseEntity.ok(userCodeResponse);
+	}
+
 
 	@GetMapping("/authenticateToken")
 	public ResponseEntity<?> authenticateToken(@CurrentUser LocalUser user) {
@@ -123,7 +177,4 @@ public class AuthController {
 	public List<User> usersByIds(){
 		return (List<User>) userRepository.findAll();
 	}
-
-
-
 }

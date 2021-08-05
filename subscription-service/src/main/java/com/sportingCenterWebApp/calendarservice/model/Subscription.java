@@ -19,13 +19,6 @@ public class Subscription {
     private final String name;
     @Column(name = "DESCR")
     private final String descr;
-
-    @Column(name = "durataMesi")
-    private int durataMesi;
-    @Column(name = "ingressiSettimanali")
-    private int ingressiSettimanali;
-    @Column(name = "numeroIngressiTotale")
-    private int numeroIngressiTotale;
     @Column(name = "fitness")
     private Boolean fitness;
     @Column(name = "nuoto")
@@ -34,9 +27,6 @@ public class Subscription {
     public Subscription() {
         this.name = "";
         this.descr = "";
-        this.durataMesi=0;
-        this.ingressiSettimanali=0;
-        this.numeroIngressiTotale=0;
         this.nuoto=false;
         this.fitness=false;
     }

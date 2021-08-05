@@ -54,6 +54,7 @@ public class SignUpRequest {
 		this.number = number;
 		this.dataNascita = dataNascita;
 		this.abbonamento= abbonamento;
+
 		this.dataScadenza = dataScadenza;
 	}
 

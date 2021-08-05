@@ -18,6 +18,8 @@ public interface UserService {
 
 	public User registerNewUser(SignUpRequest signUpRequest) throws UserAlreadyExistAuthenticationException;
 
+	public User buildUser(SignUpRequest signUpRequest) throws UserAlreadyExistAuthenticationException;
+
 	User findUserByEmail(String email);
 
 	Optional<User> findUserById(Long id);

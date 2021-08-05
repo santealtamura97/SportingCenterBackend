@@ -43,4 +43,9 @@ public class EventUserController {
     public List<Event> getBookingForUser(@PathVariable("userId") Long userId) {
         return eventService.findAllById(bookingService.getBookingsIdForUserId(userId));
     }
+
+    @GetMapping("/todayevents")
+    public List<Event> getTodayEvents() {
+        return eventService.getTodayEvents();
+    }
 }
