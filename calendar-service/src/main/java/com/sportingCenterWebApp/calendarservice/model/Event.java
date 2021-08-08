@@ -19,11 +19,14 @@ public class Event {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "dataFine")
-    private String dataFine;
+    @Column(name = "data")
+    private String data;
 
-    @Column(name = "dataInizio")
-    private final String inizio;
+    @Column(name = "inizio")
+    private String oraInizio;
+
+    @Column(name = "fine")
+    private String oraFine;
 
     @Column(name = "activityId")
     private String activityId;
@@ -34,30 +37,72 @@ public class Event {
     public Event() {
         this.title ="";
         this.activityId ="";
-        this.dataFine ="";
-        this.inizio="";
+        this.data ="";
+        this.oraInizio="";
+        this.oraFine="";
     }
 
-    public String getTitle() {
-        return this.title;
-    }
-
-    public String getActivityId(){
-        return this.activityId;
-    }
-
-    public String getInizio() {
-        return this.inizio;
-    }
-
-    public Long getId() {
-        return this.id;
-    }
 
     @Override
     public String toString() {
-        return "{ "+ "Id: " +  this.id + " Name: " + this.title + " " + this.dataFine + " " + this
-        .inizio + " actid: " + this.activityId;
+        return "{ "+ "Id: " +  this.id + " Name: " + this.title + " " + this.data + " " + this
+        .oraInizio + this.oraFine + " actid: " + this.activityId;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    public String getOraInizio() {
+        return oraInizio;
+    }
+
+    public void setOraInizio(String oraInizio) {
+        this.oraInizio = oraInizio;
+    }
+
+    public String getOraFine() {
+        return oraFine;
+    }
+
+    public void setOraFine(String oraFine) {
+        this.oraFine = oraFine;
+    }
+
+    public String getActivityId() {
+        return activityId;
+    }
+
+    public void setActivityId(String activityId) {
+        this.activityId = activityId;
+    }
+
+    public Long getNumber() {
+        return number;
+    }
+
+    public void setNumber(Long number) {
+        this.number = number;
     }
 }
 

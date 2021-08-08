@@ -23,9 +23,14 @@ public class EventUserController {
     private BookingService bookingService;
 
 
-    @RequestMapping(value = "events/{subId}/{userId}", method = RequestMethod.PUT)
-    public List<Event> getEventsForUser(@PathVariable("subId") Long subId, @PathVariable("userId") Long userId) throws ParseException {
-        return eventService.getEventsForUser(subId, userId);
+    @RequestMapping(value = "user_date_events/{subId}/{userId}/{date}", method = RequestMethod.PUT)
+    public List<Event> getEventsForUser(@PathVariable("subId") Long subId, @PathVariable("userId") Long userId, @PathVariable("date") String date) {
+        return eventService.getEventsForUser(subId, userId, date);
+    }
+
+    @RequestMapping(value = "user_events", method = RequestMethod.GET)
+    public List<Event> getEvents() {
+        return eventService.findAll();
     }
 
     @RequestMapping(value = "delete_booking/{userId}/{eventId}", method = RequestMethod.PUT)
@@ -44,8 +49,8 @@ public class EventUserController {
         return eventService.findAllById(bookingService.getBookingsIdForUserId(userId));
     }
 
-    @GetMapping("/todayevents")
+    /*@GetMapping("/todayevents")
     public List<Event> getTodayEvents() {
-        return eventService.getTodayEvents();
-    }
+       return eventService.getTodayEvents();
+    }*/
 }

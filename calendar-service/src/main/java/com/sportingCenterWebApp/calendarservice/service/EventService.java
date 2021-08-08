@@ -18,10 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class EventService {
@@ -36,7 +33,7 @@ public class EventService {
     private RestTemplate restTemplate;
 
 
-    public List<Event> getTodayEvents() {
+    /*public List<Event> getTodayEvents() {
         List<Event> allEvents = (List<Event>) eventRepository.findAll();
         List<Event> todayEvents = new ArrayList<>();
         DateFormat dateFormat= new SimpleDateFormat("dd-MM-yyyy");
@@ -57,9 +54,9 @@ public class EventService {
             }
         }
         return todayEvents;
-    }
+    }*/
 
-    public List<Event> getEventsForUser(Long subId, Long userId) {
+    /*public List<Event> getEventsForUser(Long subId, Long userId) {
         //Get Subscription From Subscription Microservice
         Subscription userSubscription = restTemplate.getForObject("http://subscription-service/all/subscriptions/getSubfromid/{subId}",
                 Subscription.class, subId);
@@ -102,15 +99,62 @@ public class EventService {
 
         return subEvents;
 
-    }
+    }*/
 
-    private Activity getActivityById(List<Activity> subActivities, String id) {
-        for (Activity activity : subActivities) {
-            if (Long.toString(activity.getId()).equals(id)){
-                return activity;
+    public List<Event> getEventsForUser(Long subId, Long userId, String date) {
+
+        //Get Subscription From Subscription Microservice
+        Subscription userSubscription = restTemplate.getForObject("http://subscription-service/all/subscriptions/getSubfromid/{subId}",
+                Subscription.class, subId);
+        Boolean nuoto = userSubscription.getNuoto();
+        Boolean fitness = userSubscription.getFitness();
+
+        //Get All Activities
+        ResponseEntity<Activity[]> responseEntity = restTemplate.getForEntity("http://activity-service/all/activities", Activity[].class);
+        Activity[] activities = responseEntity.getBody();
+
+        //Get Only Activities compatible With Subscription Type
+        List<Activity> subActivities = new ArrayList<>();
+        if (fitness && nuoto) { //fitness e nuoto
+            subActivities.addAll(Arrays.asList(activities));
+        }else if (fitness) { //fitness
+            for(Activity activity : activities) {
+                if (activity.getFitness())
+                    subActivities.add(activity);
+            }
+        }else{ //nuoto
+            for(Activity activity : activities) {
+                if (activity.getNuoto())
+                    subActivities.add(activity);
             }
         }
-        return null;
+        /*List<String> idsSubActivities = new ArrayList<String>();
+        for (Activity activity : subActivities) {
+            idsSubActivities.add(Long.toString(activity.getId()));
+        }*/
+
+        //get Only events which have activityId in the Ids of idsSubActivities
+        //and events with date (obliviously xD)
+        List<Event> allEvents = (List<Event>)eventRepository.findAll();
+        List<Event> subEvents = new ArrayList<>();
+        for (Event event : allEvents) {
+            if (contain(subActivities,event.getActivityId())) {
+                if (event.getData().equals(date)) {
+                    subEvents.add(event);
+                }
+            }
+        }
+        System.out.println("Da avere " + subEvents);
+        return subEvents;
+    }
+
+    private Boolean contain(List<Activity> subActivities, String id) {
+        for (Activity activity : subActivities) {
+            if (Long.toString(activity.getId()).equals(id)){
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean checkIsBooked(Long userId, Long eventId) {

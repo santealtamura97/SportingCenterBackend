@@ -29,10 +29,10 @@ public class EventTrainerController {
     private EventService eventService;
 
 
-    @GetMapping("/todayevents")
+    /*@GetMapping("/todayevents")
     public List<Event> getTodayEvents() {
         return eventService.getTodayEvents();
-    }
+    }*/
 
     @PostMapping("/setuserspresence/{eventId}")
     public void setUsersPresence(@PathVariable("eventId") Long eventId, @Valid @RequestBody List<User> userList){
