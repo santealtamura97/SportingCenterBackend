@@ -17,7 +17,7 @@ public class Booking {
     private long id;
 
     @Column(name = "event_id")
-    private long event_id;
+    private String event_id;
 
     @Column(name = "user_id")
     private long user_id;
@@ -28,7 +28,7 @@ public class Booking {
     public Booking(){
     }
 
-    public Booking(long event_id, long user_id) {
+    public Booking(String event_id, long user_id) {
         this.event_id = event_id;
         this.user_id = user_id;
     }
@@ -41,11 +41,11 @@ public class Booking {
         this.id = id;
     }
 
-    public long getEvent_id() {
+    public String getEvent_id() {
         return event_id;
     }
 
-    public void setEvent_id(long event_id) {
+    public void setEvent_id(String event_id) {
         this.event_id = event_id;
     }
 

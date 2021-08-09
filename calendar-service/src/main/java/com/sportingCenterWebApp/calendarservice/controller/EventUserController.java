@@ -38,16 +38,16 @@ public class EventUserController {
         bookingService.deleteBooking(userId,eventId);
     }
 
-
-    @PutMapping("events/bookings/{idUser}/{eventId}")
-    public void bookEvent(@PathVariable("idUser") Long userId, @PathVariable("eventId") Long eventId) {
+    @PutMapping("book_event/{idUser}/{eventId}")
+    public void bookEvent(@PathVariable("idUser") Long userId, @PathVariable("eventId") String eventId) {
+        eventService.setEventBooked(eventId);
         bookingService.bookEvent(userId,eventId);
     }
 
-    @RequestMapping(value = "events/bookings/{userId}", method = RequestMethod.GET)
+    /*@RequestMapping(value = "events/bookings/{userId}", method = RequestMethod.GET)
     public List<Event> getBookingForUser(@PathVariable("userId") Long userId) {
         return eventService.findAllById(bookingService.getBookingsIdForUserId(userId));
-    }
+    }*/
 
     /*@GetMapping("/todayevents")
     public List<Event> getTodayEvents() {

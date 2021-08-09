@@ -34,10 +34,10 @@ public class EventTrainerController {
         return eventService.getTodayEvents();
     }*/
 
-    @PostMapping("/setuserspresence/{eventId}")
+    /*@PostMapping("/setuserspresence/{eventId}")
     public void setUsersPresence(@PathVariable("eventId") Long eventId, @Valid @RequestBody List<User> userList){
         bookingService.setUsersPresence(eventId,userList);
-    }
+    }*/
 
     @GetMapping("/getusers/{eventId}")
     public List<User> getUsersForEvent(@PathVariable("eventId") Long eventId) {

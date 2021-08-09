@@ -47,7 +47,7 @@ public class BookingService {
         return usersForEvent;
     }
 
-    public void setUsersPresence(Long eventId, List<User> userList) {
+    /*public void setUsersPresence(Long eventId, List<User> userList) {
         List<Long> usersIdList = new ArrayList<>();
         for (User user: userList) {
             System.out.println("Id: " + user.getId());
@@ -63,22 +63,22 @@ public class BookingService {
                 }
             }
         }
-    }
+    }*/
 
-    public List<Long> getBookingsIdForUserId(Long userId) {
+    /*public List<Long> getBookingsIdForUserId(Long userId) {
         List<Booking> userBookings = (List<Booking>) bookingRepository.findBookingsByUserid(userId);
         List<Long> userEventsIds = new ArrayList<>();
         for (Booking booking : userBookings) {
             userEventsIds.add(booking.getEvent_id());
         }
         return userEventsIds;
-    }
+    }*/
 
     public void deleteBooking(Long userId, Long eventId){
         bookingRepository.deleteByUserEventId(userId, eventId);
     }
 
-    public void bookEvent(Long userId, Long eventId) {
+    public void bookEvent(Long userId, String eventId) {
         bookingRepository.save(new Booking(eventId,userId));
     }
 

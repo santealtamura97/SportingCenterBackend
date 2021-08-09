@@ -128,18 +128,13 @@ public class EventService {
                     subActivities.add(activity);
             }
         }
-        /*List<String> idsSubActivities = new ArrayList<String>();
-        for (Activity activity : subActivities) {
-            idsSubActivities.add(Long.toString(activity.getId()));
-        }*/
-
         //get Only events which have activityId in the Ids of idsSubActivities
         //and events with date (obliviously xD)
         List<Event> allEvents = (List<Event>)eventRepository.findAll();
         List<Event> subEvents = new ArrayList<>();
         for (Event event : allEvents) {
             if (contain(subActivities,event.getActivityId())) {
-                if (event.getData().equals(date)) {
+                if (event.getData().equals(date) && !(checkIsBooked(userId, event.getId())) && event.getNumber() > 0) {
                     subEvents.add(event);
                 }
             }
@@ -157,9 +152,19 @@ public class EventService {
         return false;
     }
 
+    public void setEventBooked(String eventId) {
+        List<Event> eventList = (List<Event>) eventRepository.findAll();
+        for (Event event : eventList) {
+            if (Long.toString(event.getId()).equals(eventId)) {
+                event.setNumber(event.getNumber() - 1);
+                eventRepository.save(event);
+            }
+        }
+    }
+
     private boolean checkIsBooked(Long userId, Long eventId) {
         for (Booking booking : bookingService.findAll()) {
-            if (booking.getUser_id() == userId && booking.getEvent_id() == eventId) {
+            if (booking.getUser_id() == userId && booking.getEvent_id().equals(Long.toString(eventId))) {
                 return true;
             }
         }
