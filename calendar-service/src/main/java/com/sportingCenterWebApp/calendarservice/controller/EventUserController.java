@@ -44,10 +44,10 @@ public class EventUserController {
         bookingService.bookEvent(userId,eventId);
     }
 
-    /*@RequestMapping(value = "events/bookings/{userId}", method = RequestMethod.GET)
+    @RequestMapping(value = "user_bookings/{userId}", method = RequestMethod.GET)
     public List<Event> getBookingForUser(@PathVariable("userId") Long userId) {
         return eventService.findAllById(bookingService.getBookingsIdForUserId(userId));
-    }*/
+    }
 
     /*@GetMapping("/todayevents")
     public List<Event> getTodayEvents() {

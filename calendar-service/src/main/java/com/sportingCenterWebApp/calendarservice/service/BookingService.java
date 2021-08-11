@@ -65,17 +65,18 @@ public class BookingService {
         }
     }*/
 
-    /*public List<Long> getBookingsIdForUserId(Long userId) {
+    public List<Long> getBookingsIdForUserId(Long userId) {
         List<Booking> userBookings = (List<Booking>) bookingRepository.findBookingsByUserid(userId);
         List<Long> userEventsIds = new ArrayList<>();
         for (Booking booking : userBookings) {
-            userEventsIds.add(booking.getEvent_id());
+            userEventsIds.add(Long.valueOf(booking.getEvent_id()));
         }
         return userEventsIds;
-    }*/
+    }
 
     public void deleteBooking(Long userId, Long eventId){
-        bookingRepository.deleteByUserEventId(userId, eventId);
+        System.out.println(userId + " " + eventId);
+        bookingRepository.deleteByUserEventId(userId, Long.toString(eventId));
     }
 
     public void bookEvent(Long userId, String eventId) {
