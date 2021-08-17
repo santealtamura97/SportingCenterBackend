@@ -31,6 +31,14 @@ public class UserCode implements Serializable {
     @NotNull
     private String id_abbonamento;
 
+    @Column(name ="data_scadenza_abbonamento")
+    @NotNull
+    private String scadenzaAbbonamento;
+
+    @Column(name ="ingressi")
+    @NotNull
+    private Long ingressi;
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -61,5 +69,21 @@ public class UserCode implements Serializable {
 
     public void setId_abbonamento(String id_abbonamento) {
         this.id_abbonamento = id_abbonamento;
+    }
+
+    public String getScadenzaAbbonamento() {
+        return scadenzaAbbonamento;
+    }
+
+    public void setScadenzaAbbonamento(String scadenzaAbbonamento) {
+        this.scadenzaAbbonamento = scadenzaAbbonamento;
+    }
+
+    public Long getIngressi() {
+        return ingressi;
+    }
+
+    public void setIngressi(Long ingressi) {
+        this.ingressi = ingressi;
     }
 }

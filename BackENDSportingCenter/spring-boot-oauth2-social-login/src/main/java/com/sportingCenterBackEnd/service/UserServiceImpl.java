@@ -67,8 +67,10 @@ public class UserServiceImpl implements UserService {
 		//user.setProvider(formDTO.getSocialProvider().getProviderType());
 		user.setEnabled(formDTO.isEnabled());
 		//user.setProviderUserId(formDTO.getProviderUserId());
-		//user.setDataNascita(invertDate(formDTO.getDataNascita()));
+		//user.setDataNascita(invertDate(formDTO.getDataNascita()));SS
 		user.setAbbonamento(formDTO.getAbbonamento());
+		user.setIngressi(formDTO.getIngressi());
+		user.setScadenzaAbbonamento(formDTO.getDataScadenza());
 		//user.setDataScadenza(invertDate(formDTO.getDataScadenza()));
 		Date now = Calendar.getInstance().getTime();
 		user.setCreatedDate(now);
@@ -130,6 +132,7 @@ public class UserServiceImpl implements UserService {
 		return userRepository.save(existingUser);
 	}
 
+	/*
 	public User modificaUserEsistente(final SignUpRequest signUpRequest) {
 		User existingUser = findUserByEmail(signUpRequest.getEmail());
 		existingUser.setDisplayName(signUpRequest.getDisplayName());
@@ -150,7 +153,7 @@ public class UserServiceImpl implements UserService {
 			}
 		}
 		return userRepository.save(existingUser);
-	}
+	}*/
 
 	private Boolean check_expired(String date) throws ParseException {
 		if(date != null){
@@ -177,5 +180,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<User> findUsersByRole(Long role) {
 		return (List<User>) userRepository.findUsersByRole(role);
+	}
+
+	@Override
+	public User modificaUserEsistente(SignUpRequest signUpRequest) {
+		return null;
 	}
 }

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -64,8 +65,11 @@ public class User implements Serializable {
 	@Column(name = "idAbbonamento")
 	private String abbonamento;
 
-	@Column(name = "dataScadenza")
-	private String dataScadenza;
+	@Column(name ="data_scadenza_abbonamento")
+	private String scadenzaAbbonamento;
+
+	@Column(name ="ingressi")
+	private Long ingressi;
 
 	@Column(name = "expired")
 	private Boolean expired = false;
@@ -172,12 +176,12 @@ public class User implements Serializable {
 	public void setAbbonamento(String abbonamento) {
 		this.abbonamento = abbonamento;
 	}
-	public void setDataScadenza(String dataScadenza) {
+	/*public void setDataScadenza(String dataScadenza) {
 		this.dataScadenza = dataScadenza;
 	}
 	public String getDataScadenza() {
 		return this.dataScadenza;
-	}
+	}*/
 
 	public String getAbbonamento() {
 		return this.abbonamento;
@@ -190,4 +194,19 @@ public class User implements Serializable {
 		return this.expired;
 	}
 
+	public String getScadenzaAbbonamento() {
+		return scadenzaAbbonamento;
+	}
+
+	public void setScadenzaAbbonamento(String scadenzaAbbonamento) {
+		this.scadenzaAbbonamento = scadenzaAbbonamento;
+	}
+
+	public Long getIngressi() {
+		return ingressi;
+	}
+
+	public void setIngressi(Long ingressi) {
+		this.ingressi = ingressi;
+	}
 }

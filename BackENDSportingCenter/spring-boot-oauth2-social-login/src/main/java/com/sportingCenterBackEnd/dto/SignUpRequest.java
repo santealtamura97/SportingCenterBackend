@@ -37,6 +37,8 @@ public class SignUpRequest {
 
 	private SocialProvider socialProvider;
 
+	private Long ingressi;
+
 	@Size(min = 6, message = "{Size.userDto.password}")
 	private String password;
 
@@ -108,6 +110,14 @@ public class SignUpRequest {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public Long getIngressi() {
+		return ingressi;
+	}
+
+	public void setIngressi(Long ingressi) {
+		this.ingressi = ingressi;
 	}
 
 	public SocialProvider getSocialProvider() {

@@ -140,7 +140,7 @@ public class AuthController {
 		userCode = userCode.replaceAll("^\"+|\"+$", "");
 		System.out.println(userCode);
 		UserCode uC = userCodeRepository.findByCode(userCode);
-		UserCodeResponse userCodeResponse = new UserCodeResponse(uC.getDisplay_name(), uC.getId_abbonamento());
+		UserCodeResponse userCodeResponse = new UserCodeResponse(uC.getDisplay_name(), uC.getId_abbonamento(), uC.getScadenzaAbbonamento(), uC.getIngressi());
 		return ResponseEntity.ok(userCodeResponse);
 	}
 

@@ -143,6 +143,17 @@ public class EventService {
         return subEvents;
     }
 
+    public List<Event> getEventsInDate(String date) {
+        List<Event> allEvents = (List<Event>)eventRepository.findAll();
+        List<Event> subEvents = new ArrayList<>();
+        for (Event event : allEvents) {
+            if (event.getData().equals(date) && event.getNumber() > 0){
+                subEvents.add(event);
+            }
+        }
+        return subEvents;
+    }
+
     private Boolean contain(List<Activity> subActivities, String id) {
         for (Activity activity : subActivities) {
             if (Long.toString(activity.getId()).equals(id)){
@@ -169,6 +180,11 @@ public class EventService {
             }
         }
         return false;
+    }
+
+    public Event findById(Long eventId) {
+        Optional<Event> eventOp = eventRepository.findById(eventId);
+        return eventOp.get();
     }
 
     public List<Event> findAllById(List<Long> userEventsIds) {

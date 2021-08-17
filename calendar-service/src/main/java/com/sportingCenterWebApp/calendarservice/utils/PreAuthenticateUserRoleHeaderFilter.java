@@ -11,6 +11,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,11 +22,14 @@ public class PreAuthenticateUserRoleHeaderFilter extends GenericFilterBean {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String token = request.getHeader("Authorization");
 
-
-
         String rolesString = ((HttpServletRequest) servletRequest).getHeader("roles");
-        List<String> roles = Arrays.asList(rolesString.split(" "));
-        System.out.println("Questi sono i ruoli dell'utente autenticato :" + roles);
+        List<String> roles = new ArrayList<String>();
+        try{
+            roles = Arrays.asList(rolesString.split(" "));
+            System.out.println("Questi sono i ruoli dell'utente autenticato :" + roles);
+        }catch (NullPointerException e) {
+            System.out.println("NON CI SONO RUOLI");
+        }
 
         List<SimpleGrantedAuthority> authorities = GeneralUtils.buildSimpleGrantedAuthorities(roles);
         System.out.println(authorities);

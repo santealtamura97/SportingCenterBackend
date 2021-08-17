@@ -72,7 +72,7 @@ public class UserController {
 		return (List<User>) userRepository.findAll();
 	}
 
-	@RequestMapping(value = "usersbyrole/{role}", method = RequestMethod.GET)
+	/*@RequestMapping(value = "usersbyrole/{role}", method = RequestMethod.GET)
 	public List<User> getUsersByRole(@PathVariable("role") Long role) {
 		List<User> userList = userRepository.findUsersByRole(role);
 
@@ -84,7 +84,7 @@ public class UserController {
 			}
 		}
 		return (List<User>) userRepository.findUsersByRole(role);
-	}
+	}*/
 
 	@PostMapping("/users")
 	void addUser(@RequestBody User user){

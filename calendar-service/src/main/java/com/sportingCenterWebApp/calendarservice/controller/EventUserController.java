@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -35,6 +36,8 @@ public class EventUserController {
 
     @RequestMapping(value = "delete_booking/{userId}/{eventId}", method = RequestMethod.PUT)
     public void deleteBooking(@PathVariable("userId") Long userId, @PathVariable("eventId") Long eventId){
+        Event event = eventService.findById(eventId);
+        event.setNumber(event.getNumber() + 1);
         bookingService.deleteBooking(userId,eventId);
     }
 
