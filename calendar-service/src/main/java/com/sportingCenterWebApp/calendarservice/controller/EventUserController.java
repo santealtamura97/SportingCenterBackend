@@ -1,5 +1,6 @@
 package com.sportingCenterWebApp.calendarservice.controller;
 
+import com.sportingCenterWebApp.calendarservice.dto.User;
 import com.sportingCenterWebApp.calendarservice.model.Booking;
 import com.sportingCenterWebApp.calendarservice.model.Event;
 import com.sportingCenterWebApp.calendarservice.repo.BookingRepository;
@@ -8,6 +9,7 @@ import com.sportingCenterWebApp.calendarservice.service.BookingService;
 import com.sportingCenterWebApp.calendarservice.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.text.ParseException;
 import java.util.Collections;
@@ -22,6 +24,9 @@ public class EventUserController {
 
     @Autowired
     private BookingService bookingService;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
 
     @RequestMapping(value = "user_date_events/{subId}/{userId}/{date}", method = RequestMethod.PUT)
@@ -42,9 +47,16 @@ public class EventUserController {
     }
 
     @PutMapping("book_event/{idUser}/{eventId}")
-    public void bookEvent(@PathVariable("idUser") Long userId, @PathVariable("eventId") String eventId) {
-        eventService.setEventBooked(eventId);
-        bookingService.bookEvent(userId,eventId);
+    public Event bookEvent(@PathVariable("idUser") Long userId, @PathVariable("eventId") String eventId) {
+        User user = restTemplate.getForObject("http://authentication-service/api/auth/userbyid/{userId}",
+                User.class, userId);
+        if (user.getIngressi() > 0) {
+            eventService.setEventBooked(eventId);
+            bookingService.bookEvent(userId,eventId);
+            return eventService.findById(Long.parseLong(eventId));
+        }else{
+            return null;
+        }
     }
 
     @RequestMapping(value = "user_bookings/{userId}", method = RequestMethod.GET)

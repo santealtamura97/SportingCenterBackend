@@ -100,6 +100,7 @@ public class AuthController {
 			User user = token.getUser();
 			user.setEnabled(true);
 			userRepository.save(user);
+			confirmationTokenRepository.delete(token);
 			return ResponseEntity.ok().body(new ApiResponse(true, "User registered successfully"));
 		}
 		else {

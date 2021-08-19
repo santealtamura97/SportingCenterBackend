@@ -54,6 +54,8 @@ public class User implements Serializable {
 
     private String dataScadenza;
 
+    private Long ingressi;
+
 
     private Boolean expired = false;
 
@@ -61,4 +63,7 @@ public class User implements Serializable {
         return this.id;
     }
 
+    public Long getIngressi() {
+        return ingressi;
+    }
 }
