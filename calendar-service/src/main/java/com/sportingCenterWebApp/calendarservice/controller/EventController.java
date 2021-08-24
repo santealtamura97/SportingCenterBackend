@@ -47,6 +47,12 @@ public class EventController {
         return bookingService.getPresences(eventId);
     }
 
+    @PostMapping("/add_events")
+    void addEvents(@RequestBody List<Event> eventsList){
+        for (Event event : eventsList) {
+            eventService.save(event);
+        }
+    }
 
     /*@GetMapping("/todayevents")
     public List<Event> getTodayEvents() {
