@@ -30,4 +30,5 @@ public class EventAllController {
     public List<Event> getEventsInDate( @PathVariable("date") String date) {
         return eventService.getEventsInDate(date);
     }
+
 }

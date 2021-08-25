@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,6 +21,12 @@ public class EventController {
     @Autowired
     private EventService eventService;
 
+
+    @PostMapping("/date_events")
+    public List<Event> getEventsInDate(@Valid @RequestBody String date) {
+        date = date.replaceAll("^\"+|\"+$", "");
+        return eventService.getEventsInDate(date);
+    }
 
     @GetMapping("/events")
     public List<Event> getEvents() {
@@ -53,6 +60,15 @@ public class EventController {
             eventService.save(event);
         }
     }
+
+    @PostMapping("/delete_events")
+    void deleteEvents(@RequestBody List<Event> eventsList){
+        for (Event event : eventsList) {
+            eventService.delete(event);
+        }
+    }
+
+
 
     /*@GetMapping("/todayevents")
     public List<Event> getTodayEvents() {
