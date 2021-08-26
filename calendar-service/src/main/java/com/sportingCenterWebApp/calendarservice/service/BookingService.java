@@ -25,7 +25,7 @@ public class BookingService {
     private RestTemplate restTemplate;
 
     public List<User> getUsersForEvent(Long eventId) {
-        List<Booking> bookingList = bookingRepository.findBookingsByEventid(eventId);
+        List<Booking> bookingList = bookingRepository.findBookingsByEventid(Long.toString(eventId));
         List<Long> usersId = new ArrayList<>();
         for (Booking booking : bookingList) {
             if(!booking.getPresence()) {
@@ -87,7 +87,7 @@ public class BookingService {
         bookingRepository.deleteByEventId(eventId);
     }
 
-    public List<User> getPresences(Long eventId) {
+    /*public List<User> getPresences(Long eventId) {
         //Get All Users
         ResponseEntity<User[]> responseEntity = restTemplate.getForEntity("http://authentication-service/api/auth/users", User[].class);
         User[] users = responseEntity.getBody();
@@ -104,7 +104,7 @@ public class BookingService {
             }
         }
         return usersPresent;
-    }
+    }*/
 
     protected List<Booking> findAll() {
         return (List<Booking>)bookingRepository.findAll();

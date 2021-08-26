@@ -14,7 +14,7 @@ public interface BookingRepository extends CrudRepository<Booking, Long> {
     List<Booking> findBookingsByUserid(Long id);
 
     @Query("select b from Booking b where b.event_id = :id")
-    List<Booking> findBookingsByEventid(Long id);
+    List<Booking> findBookingsByEventid(String id);
 
     @Transactional
     @Modifying

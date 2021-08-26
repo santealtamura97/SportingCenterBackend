@@ -28,6 +28,7 @@ public class EventController {
         return eventService.getEventsInDate(date);
     }
 
+
     @GetMapping("/events")
     public List<Event> getEvents() {
         return eventService.findAll();
@@ -49,10 +50,10 @@ public class EventController {
         return bookingService.getUsersForEvent(eventId);
     }
 
-    @GetMapping("/getpresences/{eventId}")
+    /*@GetMapping("/getpresences/{eventId}")
     public List<User> getPresences(@PathVariable("eventId") Long eventId) {
         return bookingService.getPresences(eventId);
-    }
+    }*/
 
     @PostMapping("/add_events")
     void addEvents(@RequestBody List<Event> eventsList){
