@@ -29,6 +29,7 @@ import com.sportingCenterBackEnd.service.UserService;
 import com.sportingCenterBackEnd.util.GeneralUtils;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 
@@ -145,6 +146,12 @@ public class AuthController {
 		return ResponseEntity.ok(userCodeResponse);
 	}
 
+	/*@PostMapping( "/profileImage")*/
+	@RequestMapping(value = "/profileImage", method = RequestMethod.POST)
+	public ResponseEntity<?> uploadProfileImage(@RequestPart(name = "img") MultipartFile img) {
+		System.out.println("Request  update photo "+ img.getOriginalFilename());
+		return ResponseEntity.ok().body(new ApiResponse(true, "Foto profilo caricata correttamente!"));
+	}
 
 	@GetMapping("/authenticateToken")
 	public ResponseEntity<?> authenticateToken(@CurrentUser LocalUser user) {

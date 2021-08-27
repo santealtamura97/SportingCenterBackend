@@ -57,6 +57,7 @@ public class User implements Serializable {
     private Long ingressi;
 
 
+
     private Boolean expired = false;
 
     public Long getId() {
