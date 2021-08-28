@@ -74,6 +74,10 @@ public class User implements Serializable {
 	@Column(name = "expired")
 	private Boolean expired = false;
 
+	@Lob
+	@Column(name = "image_profile")
+	private byte[] image;
+
 
 	// bi-directional many-to-many association to Role
 	@JsonIgnore
@@ -208,5 +212,13 @@ public class User implements Serializable {
 
 	public void setIngressi(Long ingressi) {
 		this.ingressi = ingressi;
+	}
+
+	public byte[] getImage() {
+		return image;
+	}
+
+	public void setImage(byte[] image) {
+		this.image = image;
 	}
 }

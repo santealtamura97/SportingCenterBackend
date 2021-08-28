@@ -31,6 +31,7 @@ import com.sportingCenterBackEnd.util.GeneralUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 
 @Slf4j
@@ -146,12 +147,29 @@ public class AuthController {
 		return ResponseEntity.ok(userCodeResponse);
 	}
 
-	/*@PostMapping( "/profileImage")*/
-	@RequestMapping(value = "/profileImage", method = RequestMethod.POST)
-	public ResponseEntity<?> uploadProfileImage(@RequestPart(name = "img") MultipartFile img) {
+
+	@RequestMapping(value = "/profileImage/{userId}", method = RequestMethod.POST)
+	public ResponseEntity<?> uploadProfileImage(@RequestPart(name = "img") MultipartFile img, @PathVariable("userId") String userId) throws IOException {
 		System.out.println("Request  update photo "+ img.getOriginalFilename());
+		System.out.println(userId);
+		byte[] image = img.getBytes();
+
+		Optional<User> userOp = userRepository.findById(Long.parseLong(userId));
+		User user = userOp.get();
+
+		user.setImage(image);
+		userRepository.save(user);
+
 		return ResponseEntity.ok().body(new ApiResponse(true, "Foto profilo caricata correttamente!"));
 	}
+
+	@RequestMapping(value = "/getProfileImage/{userId}", method = RequestMethod.GET)
+	public byte[] getProfileImage(@PathVariable("userId") String userId) {
+		Optional<User> userOp = userRepository.findById(Long.parseLong(userId));
+		User user = userOp.get();
+		return user.getImage();
+	}
+
 
 	@GetMapping("/authenticateToken")
 	public ResponseEntity<?> authenticateToken(@CurrentUser LocalUser user) {

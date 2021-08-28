@@ -1,6 +1,7 @@
 package com.sportingCenterWebApp.calendarservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.netflix.discovery.provider.Serializer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -56,7 +57,8 @@ public class User implements Serializable {
 
     private Long ingressi;
 
-
+    @Lob
+    private byte[] image;
 
     private Boolean expired = false;
 
