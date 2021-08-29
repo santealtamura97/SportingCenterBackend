@@ -102,7 +102,7 @@ public class AuthController {
 			User user = token.getUser();
 			user.setEnabled(true);
 			userRepository.save(user);
-			confirmationTokenRepository.delete(token);
+			//confirmationTokenRepository.delete(token);
 			return ResponseEntity.ok().body(new ApiResponse(true, "User registered successfully"));
 		}
 		else {
@@ -168,6 +168,18 @@ public class AuthController {
 		Optional<User> userOp = userRepository.findById(Long.parseLong(userId));
 		User user = userOp.get();
 		return user.getImage();
+	}
+
+
+	@PostMapping("/setEntries")
+	public ResponseEntity<?> setEntries(@Valid @RequestBody List<String> userIds) {
+		for (User user : userRepository.findAll()) {
+			if (user.getIngressi() != null && userIds.contains(user.getId().toString())) {
+				user.setIngressi(user.getIngressi() - 1);
+				userRepository.save(user);
+			}
+		}
+		return ResponseEntity.ok().body(new ApiResponse(true, "PRESENZE SALVATE!"));
 	}
 
 

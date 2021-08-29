@@ -1,4 +1,5 @@
 package com.sportingCenterWebApp.calendarservice.controller;
+import com.sportingCenterWebApp.calendarservice.model.Booking;
 import com.sportingCenterWebApp.calendarservice.model.Event;
 import com.sportingCenterWebApp.calendarservice.dto.User;
 import com.sportingCenterWebApp.calendarservice.repo.EventRepository;
@@ -48,6 +49,14 @@ public class EventController {
     @GetMapping("/getusers/{eventId}")
     public List<User> getUsersForEvent(@PathVariable("eventId") Long eventId) {
         return bookingService.getUsersForEvent(eventId);
+    }
+
+
+    @RequestMapping(value = "/remove/{eventId}/bookings", method = RequestMethod.PUT)
+    public void removeBookings(@RequestBody List<String> userIds, @PathVariable("eventId") String eventId) {
+        for (String userId : userIds) {
+            bookingService.deleteBooking(Long.parseLong(userId), Long.parseLong(eventId));
+        }
     }
 
     /*@GetMapping("/getpresences/{eventId}")

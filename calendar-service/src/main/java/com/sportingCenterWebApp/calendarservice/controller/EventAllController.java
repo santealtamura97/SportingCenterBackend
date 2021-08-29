@@ -1,7 +1,9 @@
 package com.sportingCenterWebApp.calendarservice.controller;
 
+import com.sportingCenterWebApp.calendarservice.dto.User;
 import com.sportingCenterWebApp.calendarservice.model.Event;
 import com.sportingCenterWebApp.calendarservice.repo.EventRepository;
+import com.sportingCenterWebApp.calendarservice.service.BookingService;
 import com.sportingCenterWebApp.calendarservice.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,9 @@ public class EventAllController {
 
     private EventRepository eventRepository;
 
+    @Autowired
+    private BookingService bookingService;
+
     public EventAllController(EventRepository eventRepository) {
         this.eventRepository = eventRepository;
     }
@@ -29,6 +34,11 @@ public class EventAllController {
     @RequestMapping(value = "date_events/{date}", method = RequestMethod.GET)
     public List<Event> getEventsInDate( @PathVariable("date") String date) {
         return eventService.getEventsInDate(date);
+    }
+
+    @GetMapping("/getusers/{eventId}")
+    public List<User> getUsersForEvent(@PathVariable("eventId") Long eventId) {
+        return bookingService.getUsersForEvent(eventId);
     }
 
 }
